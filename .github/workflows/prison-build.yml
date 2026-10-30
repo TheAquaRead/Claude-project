@@ -20,7 +20,7 @@ jobs:
           mkdir -p build
           curl -fL -o build/paper.jar https://fill-data.papermc.io/v1/objects/a836a016be7ac52352eb3a1efb6857bb42ee73a6c78d46e292f7e87742edb0e6/paper-26.3-231.jar
           cd build
-          java -Dpaperclip.patchonly=true -jar paper.jar
+          java '-Dpaperclip.patchonly=true' -jar paper.jar
       - name: Compile plugin and create resource pack
         run: |
           python3 -m pip install --user Pillow
@@ -71,7 +71,7 @@ jobs:
           New-Item -ItemType Directory -Force build,build/classes,build/testclasses | Out-Null
           Invoke-WebRequest -Uri 'https://fill-data.papermc.io/v1/objects/a836a016be7ac52352eb3a1efb6857bb42ee73a6c78d46e292f7e87742edb0e6/paper-26.3-231.jar' -OutFile build/paper.jar
           Push-Location build
-          java -Dpaperclip.patchonly=true -jar paper.jar
+          java '-Dpaperclip.patchonly=true' -jar paper.jar
           if ($LASTEXITCODE -ne 0) { throw 'Paper preparation failed' }
           Pop-Location
           $cp = ((Get-ChildItem build/libraries -Filter *.jar -Recurse | ForEach-Object { $_.FullName }) -join ';') + ';' + (Resolve-Path build/versions/26.3/paper-26.3.jar).Path
