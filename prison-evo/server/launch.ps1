@@ -1,4 +1,5 @@
 $ErrorActionPreference = 'Stop'
+$ProgressPreference = 'SilentlyContinue'
 Set-Location $PSScriptRoot
 
 function Test-JavaRuntime([string]$JavaPath) {
