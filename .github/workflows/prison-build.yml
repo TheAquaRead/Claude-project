@@ -53,3 +53,48 @@ jobs:
         with:
           name: Hylor-Prison-Evo
           path: build/Hylor-Prison-Evo.zip
+  windows-launch:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare Paper and build test plugins
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force build,build/classes,build/testclasses | Out-Null
+          Invoke-WebRequest -Uri 'https://fill-data.papermc.io/v1/objects/a836a016be7ac52352eb3a1efb6857bb42ee73a6c78d46e292f7e87742edb0e6/paper-26.3-231.jar' -OutFile build/paper.jar
+          Push-Location build
+          java -Dpaperclip.patchonly=true -jar paper.jar
+          if ($LASTEXITCODE -ne 0) { throw 'Paper preparation failed' }
+          Pop-Location
+          $cp = ((Get-ChildItem build/libraries -Filter *.jar -Recurse | ForEach-Object { $_.FullName }) -join ';') + ';' + (Resolve-Path build/versions/26.3/paper-26.3.jar).Path
+          javac -encoding UTF-8 -cp $cp -d build/classes prison-evo/src/PrisonEvo.java
+          if ($LASTEXITCODE -ne 0) { throw 'Plugin compilation failed' }
+          Copy-Item prison-evo/src/plugin.yml build/classes/
+          jar cf build/HylorPrisonEvo.jar -C build/classes .
+          javac -encoding UTF-8 -cp $cp -d build/testclasses prison-evo/tests/Probe.java
+          if ($LASTEXITCODE -ne 0) { throw 'Probe compilation failed' }
+          Copy-Item prison-evo/tests/probe.yml build/testclasses/plugin.yml
+          jar cf build/Probe.jar -C build/testclasses .
+          python -m pip install Pillow
+          if ($LASTEXITCODE -ne 0) { throw 'Pillow install failed' }
+          python prison-evo/generate_pack.py build/hylor-resourcepack.zip
+          if ($LASTEXITCODE -ne 0) { throw 'Resource pack generation failed' }
+      - name: Launch on Windows from Cyrillic path
+        shell: pwsh
+        run: |
+          $dir = Join-Path $env:RUNNER_TEMP ([string]::Concat([char]0x41f,[char]0x440,[char]0x43e,[char]0x432,[char]0x435,[char]0x440,[char]0x43a,[char]0x430,' Hylor'))
+          New-Item -ItemType Directory -Force -Path "$dir/plugins" | Out-Null
+          Copy-Item prison-evo/server/* $dir/
+          Copy-Item build/paper.jar,build/hylor-resourcepack.zip $dir/
+          Copy-Item build/HylorPrisonEvo.jar,build/Probe.jar "$dir/plugins/"
+          Set-Content -Path "$dir/eula.txt" -Encoding ascii -Value 'eula=true'
+          python prison-evo/tests/windows-smoke.py $dir
+          if ($LASTEXITCODE -ne 0) { throw 'Windows launcher test failed' }
