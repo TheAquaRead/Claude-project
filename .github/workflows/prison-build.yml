@@ -1,0 +1,37 @@
+name: Build Prison Evo prototype
+on:
+  push:
+    branches: [prison-evo]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+      - name: Download and prepare Paper
+        run: |
+          mkdir -p build
+          curl -fL -o build/paper.jar https://fill-data.papermc.io/v1/objects/a836a016be7ac52352eb3a1efb6857bb42ee73a6c78d46e292f7e87742edb0e6/paper-26.3-231.jar
+          cd build
+          java -Dpaperclip.patchonly=true -jar paper.jar
+      - name: Compile and package
+        run: |
+          mkdir -p build/classes build/dist/plugins
+          CP=$(find build/libraries -name '*.jar' -printf '%p:')build/versions/26.3/paper-26.3.jar
+          javac -encoding UTF-8 -cp "$CP" -d build/classes prison-evo/src/PrisonEvo.java
+          cp prison-evo/src/plugin.yml build/classes/
+          jar cf build/dist/plugins/HylorPrisonEvo.jar -C build/classes .
+          cp build/paper.jar build/dist/
+          cp prison-evo/server/* build/dist/
+          cp prison-evo/README.md build/dist/README.md
+          cd build/dist && zip -qr ../Hylor-Prison-Evo.zip .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Hylor-Prison-Evo
+          path: build/Hylor-Prison-Evo.zip
