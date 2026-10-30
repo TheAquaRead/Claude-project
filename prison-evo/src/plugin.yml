@@ -1,0 +1,19 @@
+name: HylorPrisonEvo
+version: 0.1.0
+main: PrisonEvo
+api-version: '26.3'
+commands:
+  spawn:
+    description: Spawn
+  mines:
+    description: Mines
+  shop:
+    description: Shop
+  auto:
+    description: Auto mine
+  quest:
+    description: Quest
+  sell:
+    description: Sell
+  balance:
+    description: Balance
