@@ -1,4 +1,4 @@
-name: Build Prison Evo prototype
+name: Build and test HYLOR Prison Evo
 on:
   push:
     branches: [prison-evo]
@@ -8,26 +8,44 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '25'
-      - name: Download and prepare Paper
+      - name: Download and prepare Paper 26.3
         run: |
           mkdir -p build
           curl -fL -o build/paper.jar https://fill-data.papermc.io/v1/objects/a836a016be7ac52352eb3a1efb6857bb42ee73a6c78d46e292f7e87742edb0e6/paper-26.3-231.jar
           cd build
           java -Dpaperclip.patchonly=true -jar paper.jar
-      - name: Compile and package
+      - name: Compile plugin and create resource pack
         run: |
-          mkdir -p build/classes build/dist/plugins
+          python3 -m pip install --user Pillow
+          mkdir -p build/classes build/testclasses build/plugins
           CP=$(find build/libraries -name '*.jar' -printf '%p:')build/versions/26.3/paper-26.3.jar
           javac -encoding UTF-8 -cp "$CP" -d build/classes prison-evo/src/PrisonEvo.java
           cp prison-evo/src/plugin.yml build/classes/
-          jar cf build/dist/plugins/HylorPrisonEvo.jar -C build/classes .
-          cp build/paper.jar build/dist/
+          jar cf build/plugins/HylorPrisonEvo.jar -C build/classes .
+          python3 prison-evo/generate_pack.py build/hylor-resourcepack.zip
+          javac -cp "$CP" -d build/testclasses prison-evo/tests/PackCheck.java prison-evo/tests/Probe.java
+          java -cp "build/testclasses:$CP" PackCheck build/hylor-resourcepack.zip
+          cp prison-evo/tests/probe.yml build/testclasses/plugin.yml
+          jar cf build/plugins/Probe.jar -C build/testclasses .
+      - name: Boot test server, world, NPCs, commands and pack endpoint
+        run: |
+          printf 'eula=true\n' > build/eula.txt
+          printf 'server-ip=127.0.0.1\nspawn-protection=0\nview-distance=4\nsimulation-distance=3\n' > build/server.properties
+          cp prison-evo/tests/ci-smoke.py build/
+          cd build
+          python3 ci-smoke.py
+      - name: Package server
+        run: |
+          mkdir -p build/dist/plugins
+          cp build/plugins/HylorPrisonEvo.jar build/dist/plugins/
+          cp build/paper.jar build/hylor-resourcepack.zip build/dist/
           cp prison-evo/server/* build/dist/
           cp prison-evo/README.md build/dist/README.md
           cd build/dist && zip -qr ../Hylor-Prison-Evo.zip .
