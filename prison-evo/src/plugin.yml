@@ -1,19 +1,21 @@
 name: HylorPrisonEvo
-version: 0.1.0
+version: 0.2.0
 main: PrisonEvo
 api-version: '26.3'
 commands:
   spawn:
-    description: Spawn
+    description: Вернуться на спавн
   mines:
-    description: Mines
+    description: Выбрать шахту
   shop:
-    description: Shop
+    description: Магазин и ранги
   auto:
-    description: Auto mine
-  quest:
-    description: Quest
-  sell:
-    description: Sell
+    description: Автошахта
+  quests:
+    description: Контракты
+  evo:
+    description: Эволюция
   balance:
-    description: Balance
+    description: Показать баланс
+  kit:
+    description: Получить стартовую кирку
