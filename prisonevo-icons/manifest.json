@@ -1,0 +1,32 @@
+{
+  "canvas": [
+    32,
+    32
+  ],
+  "format": "RGBA PNG",
+  "scaling": "nearest-neighbor, integer factors only",
+  "icons": [
+    "island",
+    "drill_active",
+    "storage",
+    "mine",
+    "upgrades",
+    "friends",
+    "progress",
+    "help",
+    "panda",
+    "drill_idle",
+    "storage_full",
+    "coal",
+    "iron",
+    "gold",
+    "redstone",
+    "lapis",
+    "diamond",
+    "back",
+    "close",
+    "spawn",
+    "sell"
+  ],
+  "status": "art assets only; Nexo configuration requires existing server files"
+}
