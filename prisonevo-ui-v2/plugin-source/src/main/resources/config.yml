@@ -1,0 +1,15 @@
+# Use a new world name; never point this at an existing world.
+world: prison_evo
+# Changing grid size after creating islands is not supported.
+grid-size: 2048
+island-radius: 48
+starting-balance: 0
+starting-capacity: 1000
+base-cycle-seconds: 30
+base-cycle-output: 2
+offline-limit-hours: 8
+mine-reset-seconds: 300
+
+# Enable ONLY after installing the matching PrisonEvo UI resource pack.
+ui:
+  enabled: false

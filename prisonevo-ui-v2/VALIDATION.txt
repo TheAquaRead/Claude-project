@@ -1,0 +1,13 @@
+Resource pack format 64 (Minecraft 1.21.8): PASS
+22 RGBA icons, 64x64, binary alpha: PASS
+6 GUI textures 256x256; visible width 176; bitmap advance 177: PASS
+Font, item definition and model references: PASS
+Dynamic numeric glyph advances match Java cursor metrics: PASS
+No assets/minecraft overrides: PASS
+ZIP and JAR integrity and compiled UI classes: PASS
+JUnit: 7 tests, 0 failures, 0 errors (Maven / Java 21 / Paper API 1.21.8)
+Minecraft client/server visual integration: NOT RUN
+Existing Nexo pack merge: NOT RUN (pack not provided)
+
+SHA256 resourcepack: b8eb77cd607cc51ab2c2df78b6fed707ab52fd1c49491723bd1c8d941fefecf2
+SHA256 plugin: be118f94e99661373d105a02c53a925aba24344313975dd744c784c6c15fe9b2

@@ -1,0 +1,17 @@
+name: PrisonEvo
+version: 0.1.1-ui
+main: ru.prisonevo.PrisonEvo
+api-version: '1.21.8'
+authors: [PrisonEvo]
+loadbefore: [Multiverse-Core]
+description: Personal mining islands
+commands:
+  prisonevo:
+    description: PrisonEvo menu and island
+    aliases: [pe]
+    usage: /prisonevo [menu|home|leave]
+permissions:
+  prisonevo.use:
+    default: true
+  prisonevo.admin:
+    default: op

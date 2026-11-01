@@ -1,0 +1,58 @@
+{
+  "providers": [
+    {
+      "type": "bitmap",
+      "file": "prisonevo:gui/main.png",
+      "ascent": 37,
+      "height": 256,
+      "chars": [
+        ""
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "prisonevo:gui/storage.png",
+      "ascent": 37,
+      "height": 256,
+      "chars": [
+        ""
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "prisonevo:gui/drill.png",
+      "ascent": 37,
+      "height": 256,
+      "chars": [
+        ""
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "prisonevo:gui/mine.png",
+      "ascent": 37,
+      "height": 256,
+      "chars": [
+        ""
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "prisonevo:gui/upgrades.png",
+      "ascent": 37,
+      "height": 256,
+      "chars": [
+        ""
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "prisonevo:gui/help.png",
+      "ascent": 37,
+      "height": 256,
+      "chars": [
+        ""
+      ]
+    }
+  ]
+}
